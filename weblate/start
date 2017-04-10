@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Wait for database to get available
-waitforservices
-
-#start the daemon
-exec $START_CMD "$@"
