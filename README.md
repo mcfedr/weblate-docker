@@ -1,51 +1,39 @@
 # weblate-docker
 
-[![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=master)](https://travis-ci.org/WeblateOrg/docker)
-[![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=docker)](https://travis-ci.org/WeblateOrg/docker)
-[![Docker Layers](https://images.microbadger.com/badges/image/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own image badge on microbadger.com")
-[![Docker Badge](https://images.microbadger.com/badges/version/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own version badge on microbadger.com")
-[![Requirements Status](https://requires.io/github/WeblateOrg/docker/requirements.svg?branch=master)](https://requires.io/github/WeblateOrg/docker/requirements/?branch=master)
+[![Build Status](https://travis-ci.org/nijel/weblate-docker.svg?branch=master)](https://travis-ci.org/nijel/weblate-docker)
 
 Docker container for Weblate
 
-## Docker hub tags
-
-You can use following tags on Docker hub:
-
-* `latest` - latest stable release
-* `edge` - bleeding edge docker image (contains stable Weblate, but the Docker image changes might not yet be fully tested)
-
-## Documentation
-
-Detailed documentation is available in Weblate documentation:
+Documentation is available in Weblate documentation:
 
 https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
 ## Getting started
 
 1. Create a `docker-compose.override.yml` file with your settings.
+See [weblate/environment]() for a full list of environment vars
 
-    ```yml
-    version: '2'
-    services:
-      weblate:
-        environment:
-          - WEBLATE_EMAIL_HOST=smtp.example.com
-          - WEBLATE_EMAIL_HOST_USER=user
-          - WEBLATE_EMAIL_HOST_PASSWORD=pass
-          - WEBLATE_ALLOWED_HOSTS=your hosts
-          - WEBLATE_ADMIN_PASSWORD=password for admin user
-    ```
+		weblate:
+		  environment:
+		    - WEBLATE_EMAIL_HOST=email.com
+		    - WEBLATE_EMAIL_HOST_USER=user
+		    - WEBLATE_EMAIL_HOST_PASSWORD=pass
+		    - WEBLATE_ADMIN_PASSWORD=something password
+		    - WEBLATE_ALLOWED_HOSTS=your hosts
 
 2. Build the instances
 
-        docker-compose build
+    docker-compose build
+    
+3. Setup the environment
 
-3. Start up
+    docker-compose run --rm weblate migrate
+    docker-compose run --rm weblate collectstatic
+    docker-compose run --rm weblate createadmin
+    
+4. Start up
 
-        docker-compose up
-
-4. For more detailed instructions visit https://docs.weblate.org/en/latest/admin/deployments.html#docker
+    docker-compose up
 
 ## Maintenance tasks
 
@@ -54,3 +42,4 @@ There are some cron jobs to run. You should set `WEBLATE_OFFLOAD_INDEXING=1` whe
     */5 * * * * cd /usr/share/weblate/; docker-compose run --rm weblate update_index
     @daily cd /usr/share/weblate/; docker-compose run --rm weblate cleanuptrans
     @hourly cd /usr/share/weblate-docker/; docker-compose run --rm weblate commit_pending --all --age=96
+    

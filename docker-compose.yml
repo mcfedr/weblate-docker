@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   weblate:
     image: weblate/weblate
@@ -6,7 +6,7 @@ services:
       - database
       - cache
     volumes:
-      - weblate-data:/app/data
+      - ./weblate-data:/app/data
     env_file:
       - ./environment
     restart: always
@@ -18,22 +18,26 @@ services:
     links:
       - weblate
     ports:
-      - "80:80"
-    volumes_from:
-      - weblate:ro
+      - "8001:8001"
+    volumes:
+      - ./weblate-data:/app/data:ro
     restart: always
     depends_on:
       - weblate
+    networks:
+      - proxy
+      - default
   database:
     image: postgres:9.6
     env_file:
       - ./environment
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     restart: always
   cache:
     image: memcached:1.4
     restart: always
-volumes:
-  weblate-data: {}
-  postgres-data: {}
+
+networks:
+  proxy:
+    external: true
