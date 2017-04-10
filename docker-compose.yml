@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   weblate:
     build: weblate
@@ -19,6 +19,9 @@ services:
     volumes_from:
       - weblate:ro
     restart: always
+    networks:
+      - proxy
+      - default
   database:
     image: postgres:9.4
     env_file:
@@ -32,3 +35,7 @@ services:
 volumes:
   weblate-data: {}
   postgres-data: {}
+
+networks:
+  proxy:
+    external: true
