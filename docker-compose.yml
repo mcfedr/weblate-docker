@@ -6,7 +6,7 @@ services:
       - database
       - cache
     volumes:
-      - weblate-data:/app/data
+      - ./weblate-data:/app/data
     env_file:
       - ./environment
     restart: always
@@ -20,7 +20,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - weblate-data:/app/data:ro
+      - ./weblate-data:/app/data:ro
     restart: always
     depends_on:
       - weblate
@@ -37,9 +37,6 @@ services:
   cache:
     image: memcached:1.4
     restart: always
-
-volumes:
-  weblate-data: {}
 
 networks:
   proxy:

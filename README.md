@@ -14,8 +14,6 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
 See [weblate/environment]() for a full list of environment vars
 
 		weblate:
-		  ports:
-		    - "80:8000"
 		  environment:
 		    - WEBLATE_EMAIL_HOST=email.com
 		    - WEBLATE_EMAIL_HOST_USER=user

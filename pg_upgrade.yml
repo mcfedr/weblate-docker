@@ -1,0 +1,26 @@
+#https://github.com/docker-library/postgres/issues/37#issuecomment-259963157
+version: '2'
+services:
+  old:
+    image: postgres:9.4
+    command: echo "done"
+    volumes:
+      - /usr/lib/postgresql/9.4
+      - /usr/share/postgresql/9.4
+  new:
+    image: postgres:9.6
+    command: >
+      bash -c "chown -R postgres:postgres /var/lib/postgresql/data && gosu postgres initdb  && cd /tmp \
+      && gosu postgres pg_upgrade \
+         -b /usr/lib/postgresql/9.4/bin/ \
+         -B /usr/lib/postgresql/9.6/bin/ \
+         -d /old/ \
+         -D /var/lib/postgresql/data/"
+    volumes:
+      - postgres-data:/old
+      - ./postgres-data:/var/lib/postgresql/data
+    volumes_from:
+      - old
+
+volumes:
+  postgres-data: {}
